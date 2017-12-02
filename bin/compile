@@ -27,6 +27,10 @@ if [ -d ${CACHE_DIR}/.heroku/gettext ]; then
   mkdir -p ${BUILD_DIR}/.heroku/gettext
   cp -R ${CACHE_DIR}/.heroku/gettext/* ${BUILD_DIR}/.heroku/gettext/
 
+  echo "-----> Installing export script"
+  echo "export PATH=\"${BUILD_DIR}/.heroku/gettext/usr/local/bin:\$PATH\"" > ${ROOT_DIR}/export
+  echo "export LD_LIBRARY_PATH=\"${BUILD_DIR}/.heroku/gettext/usr/local/lib:\$LD_LIBRARY_PATH\"" >> ${ROOT_DIR}/export
+
   echo "-----> Installing profile script"
   mkdir -p "${BUILD_DIR}/.profile.d"
   cp ${ROOT_DIR}/profile/* ${BUILD_DIR}/.profile.d/
@@ -76,6 +80,10 @@ mv ${GETTEXT_ARCHIVE} ${CACHE_DIR}/ &> /dev/null || true
 
 echo "-----> Cleaning up source"
 rm -fr gettext
+
+echo "-----> Installing export script"
+echo "export PATH=\"#{BUILD_DIR}/.heroku/gettext/usr/local/bin:\$PATH\"" > ${ROOT_DIR}/export
+echo "export LD_LIBRARY_PATH=\"#{BUILD_DIR}/.heroku/gettext/usr/local/lib:\$LD_LIBRARY_PATH\"" >> ${ROOT_DIR}/export
 
 echo "-----> Installing profile script"
 mkdir -p "${BUILD_DIR}/.profile.d"
