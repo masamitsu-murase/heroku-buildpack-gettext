@@ -82,8 +82,8 @@ echo "-----> Cleaning up source"
 rm -fr gettext
 
 echo "-----> Installing export script"
-echo "export PATH=\"#{BUILD_DIR}/.heroku/gettext/usr/local/bin:\$PATH\"" > ${ROOT_DIR}/export
-echo "export LD_LIBRARY_PATH=\"#{BUILD_DIR}/.heroku/gettext/usr/local/lib:\$LD_LIBRARY_PATH\"" >> ${ROOT_DIR}/export
+echo "export PATH=\"${BUILD_DIR}/.heroku/gettext/usr/local/bin:\$PATH\"" > ${ROOT_DIR}/export
+echo "export LD_LIBRARY_PATH=\"${BUILD_DIR}/.heroku/gettext/usr/local/lib:\$LD_LIBRARY_PATH\"" >> ${ROOT_DIR}/export
 
 echo "-----> Installing profile script"
 mkdir -p "${BUILD_DIR}/.profile.d"
