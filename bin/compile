@@ -3,6 +3,8 @@
 
 set -e
 
+CACHE_VERSION=cache_ver_1
+
 BIN_DIR=$(cd $(dirname $0); pwd)
 ROOT_DIR=$(dirname $BIN_DIR)
 BUILD_DIR=$1
@@ -10,9 +12,6 @@ CACHE_DIR=$2
 
 GETTEXT_DIR=${BUILD_DIR}/.heroku/gettext
 GETTEXT_PREFIX=${GETTEXT_DIR}/usr/local
-GETTEXT_VERSION=0.19.8.1
-GETTEXT_ARCHIVE=gettext-${GETTEXT_VERSION}.tar.gz
-GETTEXT_LOCATION=https://ftp.gnu.org/pub/gnu/gettext/${GETTEXT_ARCHIVE}
 
 indent() {
   sed -u 's/^/       /'
@@ -20,7 +19,7 @@ indent() {
 
 cd $BUILD_DIR
 
-if [ -d ${CACHE_DIR}/.heroku/gettext ]; then
+if [ -f ${CACHE_DIR}/.heroku/gettext/${CACHE_VERSION} ]; then
   echo "GNU gettext is already compiled" | indent
 
   echo "-----> Copying compiled gettext from cache"
@@ -40,18 +39,9 @@ fi
 
 mkdir -p $GETTEXT_DIR
 
-echo "-----> Fetching gettext"
-if [ -f ${CACHE_DIR}/${GETTEXT_ARCHIVE} ]; then
-  echo "location: ${CACHE_DIR}/${GETTEXT_ARCHIVE} (cache)"\
-    | indent
-  cp ${CACHE_DIR}/${GETTEXT_ARCHIVE} .
-else
-  echo "location: ${GETTEXT_LOCATION}" | indent
-  curl -sLO --max-time 45 --location "${GETTEXT_LOCATION}"
-fi
-
-tar zxf ${GETTEXT_ARCHIVE}
-mv gettext-${GETTEXT_VERSION} gettext
+echo "-----> Extracting gettext"
+tar zxf ${ROOT_DIR}/gettext.tar.gz
+mv gettext-0.19.8.1 gettext
 
 cd gettext
 
@@ -75,6 +65,7 @@ rm -fr ${CACHE_DIR}/.heroku/gettext
 mkdir -p ${CACHE_DIR}/.heroku/
 
 cp -R ${GETTEXT_DIR} ${CACHE_DIR}/.heroku/
+touch ${CACHE_DIR}/.heroku/gettext/${CACHE_VERSION}
 
 mv ${GETTEXT_ARCHIVE} ${CACHE_DIR}/ &> /dev/null || true
 
